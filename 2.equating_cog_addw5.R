@@ -47,9 +47,9 @@ charls_selected <- harmonized_long_151820 %>%
 table(charls_selected$childhood_edu, useNA = "ifany")
 table(charls_selected$mstat, useNA = "ifany")
 
-# # save the dataset
-# save(charls_selected, file = here::here("data", "analysis_data",
-#                                         "charls_eqt_selected.RData"))
+# save the dataset
+save(charls_selected, file = here::here("data", "analysis_data",
+                                        "charls_eqt_selected.RData"))
 #---- 2a. Generate weights ----
 # Generate weights, to ensure the age/education distributions are the same 
 # in each study wave. This will remove the aging and education effects from the 
@@ -276,9 +276,9 @@ covbal_comp_plot(w4d_test_1520$covbal_data, unw_test_1520$covbal_data,
   theme(legend.position = "right")
 
 ##---- save final weights covariate balance data ----
-# save(unw_test_1518, unw_test_1520, 
-#      w3_test_1518, w4d_test_1520, 
-#      file = here::here("data", "analysis_data", "eqt_covbal_data.RData"))
+save(unw_test_1518, unw_test_1520,
+     w3_test_1518, w4d_test_1520,
+     file = here::here("data", "analysis_data", "eqt_covbal_data.RData"))
 
 #----2b. Check distribution for weighted 2018 and 2015 ----
 # Unweighted 2015
@@ -391,9 +391,9 @@ equated_score_table <-
                  "Wave 2020 Equated score")) %>%
   mutate_if(is.numeric, round, 2)
 
-# writexl::write_xlsx(
-#   equated_score_table,
-#   path = here::here("output", "tables", "table3_equating.xlsx"))
+writexl::write_xlsx(
+  equated_score_table,
+  path = here::here("output", "tables", "table3_equating.xlsx"))
 
 ##---- Checked the distribution in the calibration group! ----
 charls_covbal %<>%
