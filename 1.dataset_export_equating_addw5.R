@@ -126,7 +126,7 @@ harmonized_addw5[, paste0("r", 1:5, "age_y")] <- age_y
 rm(age_y)
 
 harmonized_addw5 %<>%
-  select(-contains("agey"),)
+  select(-contains("agey"))
 
 # Sanity check
 harmonized_addw5 %>% select(contains("age_y")) %>%
