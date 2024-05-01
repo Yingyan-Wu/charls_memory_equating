@@ -19,6 +19,15 @@ source(here::here("scripts", "functions.R"))
 source(here::here("scripts", "equating_cog_charls", "functions_weight_dev.R"))
 
 #---- Results descriptives ----
+load(here::here("data", "analysis_data", "charls_equating_samp_eqt_151820_05012024.RData"))
+
+harmonized_addw5_selected %>%
+  select(ID, contains(c("r4imrc", "r5imrc", "r4dlrc", "r5dlrc"))) %>% 
+  pivot_longer(cols = !ID,
+               names_to = c("wave", "construct", "trial"),
+               names_pattern = "r(\\d)(.*)_(.*)") %>%
+  na.omit() %>% select(ID) %>% unique() %>% nrow() # 19364
+
 harmonized_addw5_selected %>% filter(r4age_y >= 60) %>% nrow() # 14440
 harmonized_addw5_selected %>% filter(r4age_y >= 60, 
                                      !is.na(r4imrc_cleaned), 
@@ -27,6 +36,8 @@ with(harmonized_addw5_selected %>% filter(r4age_y >= 60,
                                      !is.na(r4imrc_cleaned), 
                                      !is.na(r4dlrc_cleaned)), 
      table(r4dlrc_cleaned > r4imrc_cleaned, useNA = "ifany"))/7676
+# FALSE    TRUE 
+# 0.47642 0.52358 
 
 harmonized_addw5_selected %>% filter(r5age_y >= 60) %>% nrow() # 15704
 harmonized_addw5_selected %>% filter(r5age_y >= 60, 
@@ -36,9 +47,14 @@ with(harmonized_addw5_selected %>% filter(r5age_y >= 60,
                                           !is.na(r5imrc_cleaned), 
                                           !is.na(r5dlrc_cleaned)), 
      table(r5dlrc_cleaned > r5imrc_cleaned, useNA = "ifany"))/9137
+# FALSE      TRUE 
+# 0.3477071 0.6522929 
 
 #---- Table 2. descriptive table 1 ----
 load(here::here("data", "analysis_data", "charls_eqt_selected.RData"))
+# Unique participants
+charls_selected %>% select(ID) %>% unique() %>% nrow() # 11148
+# Table
 table1_151820 <- charls_selected %>%
   select(age_y, female, childhood_edu, rural, work_status,
          hukou_impute, imrc_cleaned, dlrc_cleaned, wave) %>%
@@ -93,7 +109,7 @@ table1_151820 %>%  as_flex_table()
 #   path = here::here("output", "tables", "table1_equating_calibrate_sample_151820.docx"))
 
 #----  Figure 1. Empirical plot ----
-load(here::here("data", "analysis_data", "charls_equating_samp_eqt_151820.RData"))
+load(here::here("data", "analysis_data", "charls_equating_samp_eqt_151820_05012024.RData"))
 ##---- eqted plot ----
 harmonized_addw5_selected %<>%
   mutate(imrc_balanced = case_when(!is.na(r1imrc) & !is.na(r2imrc) & 
@@ -164,7 +180,7 @@ eqted_empirical_plot <-
   # geom_text(aes(label = ifelse(type == "eqt" & year >= 2018, 
   #                              as.character(round(mean, 2)), '')),hjust=0,vjust=0) +
   scale_x_continuous(breaks = c(2011, 2013, 2015, 2018, 2020)) +
-  scale_y_continuous(limits = c(2.4, 5.2), breaks = seq(3, 5, by = 0.5)) +
+  # scale_y_continuous(limits = c(2.4, 5.2), breaks = seq(3, 5, by = 0.5)) +
   scale_color_manual(name = "Variable",
                      values = c("cyan3", "salmon", "cyan3", "salmon"),
                      labels = c("Original immediate word recall",
@@ -205,51 +221,44 @@ eqted_empirical_plot <-
   labs(x = "Year", y = "Word recall scores")
 
 eqted_empirical_plot
-# ggsave(eqted_empirical_plot,
-#        filename = here::here("output", "figures", "figure1_empirical_plot_eqted.png"),
-#        device = "png", dpi = 300, width = 7, height = 5, units = "in")
+ggsave(eqted_empirical_plot,
+       filename = here::here("output", "figures", "figure1_empirical_plot_eqted_2015_20182020.png"),
+       device = "png", dpi = 300, width = 7, height = 5, units = "in")
 
 
-#---- Figure 2. Covariate balance plot ----
-load(here::here("data", "analysis_data", "eqt_covbal_data.RData"))
-
+#---- Figure 3. Covariate balance plot ----
+load(here::here("data", "analysis_data", "eqt_covbal_data_2015_20182020.RData"))
+covbal_comp_plot(w4b_test$covbal_data, unw_test$covbal_data,
+                 "2015", "2018/2020")
 # For facetted plots
-wtd_covbal_forfacetplot <- 
-  w3_test_1518$covbal_data %>% mutate(year = "2015 and 2018") %>%
-  rbind(w4d_test_1520$covbal_data %>% mutate(year = "2015 and 2020")) 
-
-unw_covbal_forfacetplot <- 
-  unw_test_1518$covbal_data %>% mutate(year = "2015 and 2018") %>%
-  rbind(unw_test_1520$covbal_data %>% mutate(year = "2015 and 2020")) 
-
 figure2_covbal <- 
-  covbal_comp_plot(wtd_covbal_forfacetplot, unw_covbal_forfacetplot,
-                   "2015", "2018 or 2020")  +
-  facet_wrap(~year) +
+  covbal_comp_plot(w4b_test$covbal_data, unw_test$covbal_data,
+                   "2015", "2018/2020")  +
   # xlab("Standardized mean difference") +
   scale_shape_manual(name = element_blank(),
                      values = c(21, 16), labels = c("Unweighted", "Weighted")) +
   scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.1)) +
-  theme(legend.position = "bottom", legend.direction = "horizontal",
+  theme(legend.position = "right", legend.direction = "vertical",
         legend.title.align = 0.5,
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 10))
 figure2_covbal
 ggsave(figure2_covbal,
-       filename = here::here("output", "figures", "figure2_covbal_plot.png"),
+       filename = here::here("output", "figures", "figure3_covbal_plot_2015_20182020.png"),
        device = "png", dpi = 300, width = 9, height = 7, units = "in")
 
-#---- Figure 3. equated equating plot ----
-# in euqating_cog_addw5.R script
+#---- Figure 4. equated equating plot ----
+# in equating_cog.R script
 
-#---- Figure S1. distribution of different trials of imrc -----
-load(here::here("data", "analysis_data", "charls_equating_samp_eqt_151820.RData"))
+#---- Figure 2. distribution of different trials of imrc -----
+load(here::here("data", "analysis_data", "charls_equating_samp_eqt_151820_05012024.RData"))
 
 rc_long <- harmonized_addw5_selected %>%
   select(ID, contains(c("r4imrc", "r5imrc", "r4dlrc", "r5dlrc"))) %>% 
   pivot_longer(cols = !ID,
                names_to = c("wave", "construct", "trial"),
                names_pattern = "r(\\d)(.*)_(.*)") %>%
+  na.omit() %>%
   mutate(year = case_when(wave == 4 ~ "Wave 2018",
                           wave == 5 ~ "Wave 2020"),
          measure = case_when(
@@ -274,7 +283,7 @@ rc_long %>%
   labs(x = element_blank(), y = "Word recall scores") +
   theme_bw()
 
-ggsave(here::here("output", "figures", "figureX_rc_dist.png"),
+ggsave(here::here("output", "figures", "figure2_rc_dist_2015_20182020.png"),
        device = "png", dpi = 300, width = 7, height = 5, units = "in")
 
 #---- OLD -----
