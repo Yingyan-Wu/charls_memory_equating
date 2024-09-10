@@ -8,9 +8,11 @@ We aimed to document the changes made to the word recall tests in the China Heal
 
 * Dataset: the China Health and Retirement Longitudinal Study (CHARLS waves 2015, 2018, 2020)
 * Measures of interest: Immediate word recall test scores and delayed word recall test scores
-* Methods: We created a calibration sample balancing age, gender, and education to ensure consistent underlying test ability across waves. Within this sample, we used weighted equipercentile equating to crosswalk percentile ranks between the scores in the 2015 and 2018/2020 participants, then extended to the full study sample. We used R package `equate`(Robitzsch, 2019) for the equipercentile method. Analyses were run using `R 4.3.1`.
+* Methods: We created a calibration sample balancing age, gender, and education to ensure consistent underlying test ability across waves. Within this sample, we used weighted equipercentile equating to crosswalk percentile ranks between the scores in the 2015 and 2018/2020 participants, then extended to the full study sample. We used the R package `equate`(Robitzsch, 2019) for the equipercentile method. Analyses were run using `R 4.3.1`.
 
 ## The crosswalk between original immediate and delayed word recall scores and equated scores in waves 2018 and 2020
+**Note**: The equated scores should be applied to the **first trial** of the immediate word recall tests in waves 2018 and 2020. In these waves, the immediate recall tests were administered in three trials using the same word list with different word orders, whereas only one trial was conducted in waves 2011-2015. To ensure consistency, we performed the equating method on the first trial of the immediate word recall for waves 2018 and 2020.
+
 |     Score        |     Original score    |     Wave 2018/2020 Equated score    |
 |------------------|-----------------------|-------------------------------------|
 |     Immediate    |     0                 |     0.2                             |
