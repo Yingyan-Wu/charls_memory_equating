@@ -182,7 +182,7 @@ eqted_empirical_plot <-
   scale_x_continuous(breaks = c(2011, 2013, 2015, 2018, 2020)) +
   # scale_y_continuous(limits = c(2.4, 5.2), breaks = seq(3, 5, by = 0.5)) +
   scale_color_manual(name = "Variable",
-                     values = c("cyan3", "salmon", "cyan3", "salmon"),
+                     values = c("#67b4b0", "#6c4d86", "#67b4b0", "#6c4d86"),
                      labels = c("Original immediate word recall",
                                 "Original delayed word recall",
                                 "Equated immediate word recall",
@@ -204,7 +204,6 @@ eqted_empirical_plot <-
         text = element_text(size = 10, color = "black"),
         axis.text.x = element_text(size = 10, color = "black"),
         axis.text.y = element_text(size = 10, color = "black"),
-        legend.title.align = 0.5,
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 10)) +
   guides(
@@ -222,33 +221,11 @@ eqted_empirical_plot <-
 
 eqted_empirical_plot
 ggsave(eqted_empirical_plot,
+       filename = here::here("output", "figures", "figure1_empirical_plot_eqted_2015_20182020.eps"),
+       device = "eps", dpi = 300, width = 7, height = 5, units = "in")
+ggsave(eqted_empirical_plot,
        filename = here::here("output", "figures", "figure1_empirical_plot_eqted_2015_20182020.png"),
        device = "png", dpi = 300, width = 7, height = 5, units = "in")
-
-
-#---- Figure 3. Covariate balance plot ----
-load(here::here("data", "analysis_data", "eqt_covbal_data_2015_20182020.RData"))
-covbal_comp_plot(w4b_test$covbal_data, unw_test$covbal_data,
-                 "2015", "2018/2020")
-# For facetted plots
-figure2_covbal <- 
-  covbal_comp_plot(w4b_test$covbal_data, unw_test$covbal_data,
-                   "2015", "2018/2020")  +
-  # xlab("Standardized mean difference") +
-  scale_shape_manual(name = element_blank(),
-                     values = c(21, 16), labels = c("Unweighted", "Weighted")) +
-  scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.1)) +
-  theme(legend.position = "right", legend.direction = "vertical",
-        legend.title.align = 0.5,
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 10))
-figure2_covbal
-ggsave(figure2_covbal,
-       filename = here::here("output", "figures", "figure3_covbal_plot_2015_20182020.png"),
-       device = "png", dpi = 300, width = 9, height = 7, units = "in")
-
-#---- Figure 4. equated equating plot ----
-# in equating_cog.R script
 
 #---- Figure 2. distribution of different trials of imrc -----
 load(here::here("data", "analysis_data", "charls_equating_samp_eqt_151820_05012024.RData"))
@@ -283,8 +260,38 @@ rc_long %>%
   labs(x = element_blank(), y = "Word recall scores") +
   theme_bw()
 
-ggsave(here::here("output", "figures", "figure2_rc_dist_2015_20182020.png"),
-       device = "png", dpi = 300, width = 7, height = 5, units = "in")
+ggsave(here::here("output", "figures", "figure2_rc_dist_2015_20182020.eps"),
+       device = "eps", dpi = 300, width = 7, height = 5, units = "in")
+
+#---- Figure 3. Covariate balance plot ----
+load(here::here("data", "analysis_data", "eqt_covbal_data_2015_20182020.RData"))
+covbal_comp_plot(w4b_test$covbal_data, unw_test$covbal_data,
+                 "2015", "2018/2020")
+# For facetted plots
+figure2_covbal <- 
+  covbal_comp_plot(w4b_test$covbal_data, unw_test$covbal_data,
+                   "2015", "2018/2020")  +
+  # xlab("Standardized mean difference") +
+  scale_shape_manual(name = element_blank(),
+                     values = c(21, 16), labels = c("Unweighted", "Weighted")) +
+  scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.1)) +
+  theme(legend.position = "right", legend.direction = "vertical",
+        legend.title.align = 0.5,
+        legend.text = element_text(size = 12),
+        text = element_text(size = 12, color = "black"), 
+        axis.text.x = element_text(size = 12, color = "black"), 
+        axis.text.y = element_text(size = 12, color = "black"))
+figure2_covbal
+ggsave(figure2_covbal,
+       filename = here::here("output", "figures", "figure3_covbal_plot_2015_20182020.eps"),
+       device = "eps", dpi = 300, width = 9, height = 7, units = "in")
+ggsave(figure2_covbal,
+       filename = here::here("output", "figures", "figure3_covbal_plot_2015_20182020.png"),
+       device = "png", dpi = 300, width = 9, height = 7, units = "in")
+
+#---- Figure 4. equated equating plot ----
+# in equating_cog.R script
+
 
 #---- OLD -----
 ##---- before equating ----
