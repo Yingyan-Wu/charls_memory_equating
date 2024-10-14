@@ -48,7 +48,7 @@ checkcovbal <- function(data, weightvar, treatvar){
     ggplot(aes(x = std.eff.sz, y = label)) +
     geom_point(size = 2, color = "#0072B2") +
     geom_vline(xintercept = 0) +
-    xlab("Standardized mean diff Mean(Ref) - Mean(Index)/SD(Ref)") +
+    xlab("Standardized mean diff Mean(Index) - Mean(Ref)/SD(Ref)") +
     theme_bw() +
     # geom_vline(xintercept = c(-0.2, 0.2), linetype = "dashed",
     #            color = "dark grey") +
@@ -68,10 +68,10 @@ covbal_comp_plot <- function(weighted_covbal_data, unweighted_covbal_data,
   
   plot <- covbal_toplot %>%
     ggplot(aes(x = std.eff.sz, y = label)) +
-    geom_point(aes(shape = IOW), size = 2, color = "#0072B2") +
+    geom_point(aes(shape = IOW), size = 3, color = "#0072B2") +
     scale_shape_manual(values = c(21, 16)) +
     geom_vline(xintercept = 0) +
-    xlab(paste0("Standardized mean diff\nmean(Wave ",ref, ") - mean(Wave ", index,
+    xlab(paste0("Standardized mean diff\nmean(Wave ",index, ") - mean(Wave ", ref,
                 ")/SD(Wave ", ref, ")")) +
     theme_bw() +
     # geom_vline(xintercept = c(-0.2, 0.2), linetype = "dashed",
