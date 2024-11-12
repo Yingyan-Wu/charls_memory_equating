@@ -1,7 +1,7 @@
 # charls_memory_equating
-This repo contains all the code necessary to replicate data construction and analyses in the paper: 
+This repo contains all the code necessary to replicate data construction and analyses in the paper (currently in press in *Journal of Alzheimer's Disease Reports*, full citation and link pending): 
 
-*How to assess cognitive decline when cognitive test administration procedures change across study waves? Harmonizing word recall scores across study waves in the China Health and Retirement Longitudinal Study*
+*Wu Y, Zhang YS, Kobayashi LC, Mayeda ER, Gross AL. How to assess cognitive decline when cognitive test administration procedures change across study waves? Harmonizing word recall scores across study waves in the China Health and Retirement Longitudinal Study. Journal of Alzheimer’s Disease Reports (In Press)*
 
 ## Project Descriptions
 We aimed to document the changes made to the word recall tests in the China Health and Retirement Longitudinal Study (CHARLS) and apply a test-equating approach to adjust for the test item nonequivalence that stems from different test administrations to generate comparable scores that facilitate longitudinal analysis.
