@@ -227,6 +227,11 @@ r45freqdl_IOW <- charls_covbal %>%
   dplyr::count(dlrc_cleaned, wt = SW4b_twang_trunc99) %>%
   as.freqtab()
 
+quantile(charls_covbal[charls_covbal$wave == "3", "dlrc_cleaned"], 
+         c(0.1, 0.25, 0.5, 0.75, 0.9, 0.99))
+with(charls_covbal %>% filter(wave %in% c("4", "5")), 
+     wtd.quantile(dlrc_cleaned, weights = SW4b_twang_trunc99, probs= c(0.1, 0.25, 0.5, 0.75, 0.9, 0.99)))
+
 #---- 3. Perform the equating ----
 ##---- Immediate recall ----
 # Wave 4
