@@ -39,8 +39,45 @@ We aimed to document the changes made to the word recall tests in the China Heal
 |                  |     10                |     7.8                             |
 
 
+## Applying the equated scores to CHARLS harmonized and original data
+`eqt_crosswalk_table.xlsx` in this repository has the crosswalk table (same as above with slightly different programming-friendly column names and labels). 
+
+Packages needed: readxl, tidyverse, dplyr.
+
+Base R can also be used to clean the data but the example for using base R to apply the crosswalk is not included below
+
+Link to the excel file: https://github.com/Yingyan-Wu/charls_memory_equating/blob/main/eqt_crosswalk_table.xlsx
+
+···
+eqt_table <- readxl::read_xlsx(here::here("eqt_crosswalk_table.xlsx")) %>%
+  pivot_wider(id_cols = "original_score", names_from = "test", 
+              values_from = "eqt_score", names_sep = "") %>%
+  dplyr::rename_at(vars(ends_with("rc")), ~ str_c("r4", ., "_eqt")) %>%
+  mutate(r5imrc_eqt = r4imrc_eqt,
+         r5dlrc_eqt = r4dlrc_eqt)
+
+# If you have a data frame with the immediate word recall scores for 2018 and 2020 as r4imrc, r5imrc
+# and for delayed word recall scores for 2018 and 2020 as r4dlrc, r5dlrc.
+charls_data <- charls_data %>%
+  left_join(eqt_table %>% select(original_score, r4imrc_eqt), 
+            by = c("r4imrc" = "original_score")) %>%
+  left_join(eqt_table %>% select(original_score, r4dlrc_eqt), 
+            by = c("r4dlrc" = "original_score")) %>%
+  left_join(eqt_table %>% select(original_score, r5imrc_eqt), 
+            by = c("r5imrc" = "original_score")) %>%
+  left_join(eqt_table %>% select(original_score, r5dlrc_eqt), 
+            by = c("r5dlrc" = "original_score"))
+
+# # You can also do 
+charls_data <- charls_data %>%
+  mutate(r4imrc_eqt = case_when(r4imrc == 0 ~ 0.2,
+                                ........         ))
+
+# Example code for loading and creating wave 5 `imrc` and `dlrc` variables were in Script 1.dataset_export_equating_addw5.R
+···
+
 ## Scripts Descriptions
-*R scripts are named in the order they should be run. Functions created by the authors were sourced where needed.*
+*R scripts for data construction, weighting development, equating and generating tables and figures were in the `scripts` folder. The R scripts are named in the order they should be run. Functions created by the authors were sourced where needed.*
 * **1.dataset_export_equating_addw5.R**: Cleans the data and creates the necessary variable for the analysis.
 * **2.equating_cog.R**: Creates the calibration group, generates weights for covariate balance and performs the equating to generate a comparable score.
 * **3.tables_figures.R**: Contains code to create tables and figures in the results
